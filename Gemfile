@@ -4,6 +4,7 @@ ruby '2.5.1'
 
 gem 'sinatra'
 gem 'sequel'
+gem 'activesupport', require: 'active_support/all'
 
 group :production do
   gem 'mysql2'

@@ -11,7 +11,7 @@ module Subscriptions
     context 'when a store is successfully logged in' do
       let(:shop_params) {
         {
-          'name' => 'snowdevil.myshopify.com',
+          'shop' => 'snowdevil.myshopify.com',
         }
       }
 
