@@ -1,11 +1,19 @@
 module Subscriptions
   class App < Sinatra::Base
-    helpers Subscriptions::SessionAuth
-
     enable :sessions
+
+    use OmniAuth::Builder do
+      provider :shopify, ENV['SHOPIFY_API_KEY'], ENV['SHOPIFY_SHARED_SECRET'], :scope => 'read_products,read_orders,write_content'
+    end
 
     configure :development do
       register Sinatra::Reloader
+    end
+
+    helpers Subscriptions::SessionAuth
+
+    get '/install' do
+      erb :install
     end
 
     post '/login' do

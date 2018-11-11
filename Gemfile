@@ -15,9 +15,6 @@ end
 group :development, :test do
   gem 'byebug'
   gem 'sqlite3'
-end
-
-group :development do
   gem 'dotenv'
 end
 

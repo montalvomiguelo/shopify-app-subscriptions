@@ -17,6 +17,10 @@ require_relative '../config/boot'
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
+  config.when_first_matching_example_defined(:omniauth) do
+    require_relative 'support/omniauth'
+  end
+
   config.filter_gems_from_backtrace 'rack', 'rack-test', 'sequel', 'sinatra'
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

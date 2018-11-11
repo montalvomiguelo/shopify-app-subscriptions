@@ -1,7 +1,7 @@
 module Subscriptions
   Shop = Struct.new(:id, :name, :token)
 
-  RSpec.describe App do
+  RSpec.describe App, :omniauth do
     include Rack::Test::Methods
 
     def app
@@ -30,25 +30,37 @@ module Subscriptions
       end
     end
 
+    describe 'GET /install' do
+      it 'responds with a 200 (OK)' do
+        get '/install'
+
+        expect(last_response.status).to eq(200)
+      end
+    end
+
+    describe 'GET /auth/shopify' do
+      it 'responds with a 302 (Redirect)' do
+        get '/auth/shopify'
+
+        expect(last_response.status).to eq(302)
+      end
+
+      it 'redirects to /auth/shopify/callback' do
+        get '/auth/shopify'
+
+        expect(last_response.location).to include('/auth/shopify/callback')
+      end
+    end
+
     describe 'GET /auth/shopify/callback' do
       let(:params) {
         { 'shop' => 'snowdevil.myshopify.com' }
       }
 
-      let(:rack_env) {
-        {
-          'omniauth.auth' => {
-            'credentials' => {
-              'token' => 'token'
-            }
-          }
-        }
-      }
-
       it 'responds with a 302 (Redirect)' do
         update_or_create_shop
 
-        get '/auth/shopify/callback', params, rack_env
+        get '/auth/shopify/callback', params
 
         expect(last_response.status).to eq(302)
       end
@@ -56,13 +68,13 @@ module Subscriptions
       it 'updates or creates the shop in data base' do
         update_or_create_shop
 
-        get '/auth/shopify/callback', params, rack_env
+        get '/auth/shopify/callback', params
       end
 
       it 'creates a session for the shop' do
         update_or_create_shop
 
-        get '/auth/shopify/callback', params, rack_env
+        get '/auth/shopify/callback', params
 
         expect(last_request.session[:shopify]).not_to be_nil
         expect(last_request.session[:shopify][:shop]).to eq('snowdevil.myshopify.com')
