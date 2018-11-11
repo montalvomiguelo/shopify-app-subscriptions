@@ -1,5 +1,3 @@
-require_relative '../../app/app'
-
 module Subscriptions
   RSpec.describe 'Subscriptions App' do
     include Rack::Test::Methods

@@ -4,6 +4,10 @@ module Subscriptions
 
     enable :sessions
 
+    configure :development do
+      register Sinatra::Reloader
+    end
+
     post '/login' do
       authenticate!
     end

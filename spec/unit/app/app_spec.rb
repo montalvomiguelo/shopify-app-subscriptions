@@ -1,5 +1,3 @@
-require_relative '../../../app/app'
-
 module Subscriptions
   Shop = Struct.new(:id, :name, :token)
 
