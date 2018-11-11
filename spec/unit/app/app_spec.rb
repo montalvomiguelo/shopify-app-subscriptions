@@ -65,7 +65,7 @@ module Subscriptions
         expect(last_response.status).to eq(302)
       end
 
-      it 'updates or creates the shop in data base' do
+      it 'updates or creates the shop in database' do
         update_or_create_shop
 
         get '/auth/shopify/callback', params

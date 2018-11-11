@@ -9,6 +9,10 @@ end
 
 require_relative '../app/helpers/session_auth'
 
+require_relative 'database'
+
+require_relative '../models/shop'
+
 require_relative '../app/repositories/shop_repository'
 
 require_relative '../app/app'

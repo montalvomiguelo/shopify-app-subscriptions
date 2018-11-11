@@ -21,7 +21,7 @@ module Subscriptions
     end
 
     get '/auth/shopify/callback' do
-      shop_name = params[:shop]
+      shop_name = env['omniauth.auth'].uid
       token = env['omniauth.auth']['credentials']['token']
 
       shop = shop_repository.update_or_create(name: shop_name, token: token)
