@@ -1,5 +1,7 @@
 module Subscriptions
   class App < Sinatra::Base
+    set :protection, except: :frame_options
+
     enable :sessions
 
     use OmniAuth::Builder do
