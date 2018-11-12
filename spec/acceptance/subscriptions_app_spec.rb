@@ -40,15 +40,15 @@ module Subscriptions
       let(:rack_env) {
         {
           'rack.session' => {
-            :shop => 'snowdevil.myshopify.com',
-            :token => 'token'
+            :shopify => {
+              :shop => 'snowdevil.myshopify.com',
+              :token => 'token'
+            }
           }
         }
       }
 
       it 'allows to access the home page' do
-        pending 'Need to protect the home page'
-
         get '/', {}, rack_env
 
         expect(last_response).to be_ok
@@ -57,11 +57,9 @@ module Subscriptions
 
     context 'when session does not exist' do
       it 'does not allow to access the home page' do
-        pending 'Need to protect the home page'
-
         get '/'
 
-        expect(last_response.status).not_to be_ok
+        expect(last_response).not_to be_ok
       end
     end
   end
