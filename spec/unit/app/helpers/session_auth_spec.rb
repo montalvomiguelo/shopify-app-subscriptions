@@ -8,13 +8,36 @@ module Subscriptions
 
     subject do
       Class.new do
-        attr_accessor :params
+        attr_accessor :params, :session
 
-        def initialize(params = {})
+        def initialize(params = {}, session = {})
           @params = params
+          @session = session
         end
 
         include Subscriptions::SessionAuth
+      end
+    end
+
+    describe '#protected!' do
+      context 'when the shop is not logged in' do
+        let(:new_subject) { subject.new }
+
+        it 'authenticates the shop' do
+          expect(new_subject).to receive(:authenticate!)
+
+          new_subject.protected!
+        end
+      end
+
+      context 'when the shop is logged in' do
+        let(:new_subject) { subject.new({}, { :shopify => { :shop => 'snowdevil.myshopify.com', :token => 'token' } }) }
+
+        it 'does not authenticate the shop' do
+          expect(new_subject).not_to receive(:authenticate!)
+
+          new_subject.protected!
+        end
       end
     end
 

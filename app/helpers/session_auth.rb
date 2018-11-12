@@ -22,6 +22,9 @@ module Subscriptions
     end
 
     def protected!
+      unless session.key?(:shopify)
+        authenticate!
+      end
     end
   end
 end
