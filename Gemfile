@@ -7,6 +7,7 @@ gem 'sequel'
 gem 'activesupport', require: 'active_support/all'
 gem 'omniauth-shopify-oauth2'
 gem 'sinatra-contrib'
+gem 'rake'
 
 group :production do
   gem 'mysql2'
