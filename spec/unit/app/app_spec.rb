@@ -30,6 +30,14 @@ module Subscriptions
       end
     end
 
+    describe 'GET /' do
+      it 'protects the route' do
+        expect_any_instance_of(app).to receive(:protected!)
+
+        get '/'
+      end
+    end
+
     describe 'GET /install' do
       it 'responds with a 200 (OK)' do
         get '/install'

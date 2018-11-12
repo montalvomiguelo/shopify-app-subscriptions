@@ -20,5 +20,8 @@ module Subscriptions
       uri = URI("http://#{name}")
       uri.host.ends_with?('.myshopify.com') ? uri.host : nil
     end
+
+    def protected!
+    end
   end
 end

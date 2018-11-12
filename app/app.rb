@@ -12,6 +12,10 @@ module Subscriptions
 
     helpers Subscriptions::SessionAuth
 
+    get '/' do
+      protected!
+    end
+
     get '/install' do
       erb :install
     end
