@@ -1,9 +1,13 @@
 module Subscriptions
   module SessionAuth
-    def authenticate!
+    def authenticate!(return_to = '/')
       shop_name = sanitized_shop_name
       redirect '/install' unless shop_name
-      redirect "/auth/shopify?shop=#{shop_name}"
+      redirect "/auth/shopify?shop=#{shop_name}&return_to=#{base_url}#{return_to}"
+    end
+
+    def base_url
+      @base_url ||= request.base_url
     end
 
     def sanitized_shop_name
@@ -23,7 +27,9 @@ module Subscriptions
 
     def protected!
       unless session.key?(:shopify)
-        authenticate!
+        return_to = request.path_info
+
+        authenticate!(return_to)
       end
     end
   end

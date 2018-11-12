@@ -1,4 +1,6 @@
 module Subscriptions
+  Request = Struct.new(:path_info)
+
   RSpec.describe SessionAuth do
     include Rack::Test::Methods
 
@@ -8,7 +10,7 @@ module Subscriptions
 
     subject do
       Class.new do
-        attr_accessor :params, :session
+        attr_accessor :params, :session, :request
 
         def initialize(params = {}, session = {})
           @params = params
@@ -22,9 +24,11 @@ module Subscriptions
     describe '#protected!' do
       context 'when the shop is not logged in' do
         let(:new_subject) { subject.new }
+        let(:request) { Request.new('/') }
 
         it 'authenticates the shop' do
           expect(new_subject).to receive(:authenticate!)
+          allow(new_subject).to receive(:request).and_return(request)
 
           new_subject.protected!
         end
@@ -73,6 +77,15 @@ module Subscriptions
           expect(last_response.location).to include('/auth/shopify')
         end
       end
+
+      context 'auth url' do
+        it 'includes the return_to parameter with a value build with the base url and the return_to value' do
+          post '/login', shop_params
+
+          expect(last_response.location).to include('&return_to=http://example.org/')
+        end
+      end
+
     end
 
     describe '#sanitized_shop_name' do

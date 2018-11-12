@@ -73,6 +73,18 @@ module Subscriptions
         expect(last_response.status).to eq(302)
       end
 
+      it 'redirects to the return_to url from omniauth params' do
+        update_or_create_shop
+
+        get '/auth/shopify/callback', params, {
+          'rack.session' => {
+            'omniauth.params' => { 'return_to' => 'http://example.org/protected' }
+          }
+        }
+
+        expect(last_response.location).to eq('http://example.org/protected')
+      end
+
       it 'updates or creates the shop in database' do
         update_or_create_shop
 

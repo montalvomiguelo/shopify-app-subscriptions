@@ -37,7 +37,9 @@ module Subscriptions
         token: token
       }
 
-      redirect '/'
+      return_to = env['omniauth.params']['return_to']
+
+      redirect return_to
     end
 
     private
