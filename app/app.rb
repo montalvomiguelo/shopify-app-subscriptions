@@ -26,6 +26,12 @@ module Subscriptions
       authenticate!
     end
 
+    get '/logout' do
+      session.delete(:shopify)
+
+      redirect '/install'
+    end
+
     get '/auth/shopify/callback' do
       shop_name = env['omniauth.auth'].uid
       token = env['omniauth.auth']['credentials']['token']

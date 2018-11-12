@@ -101,5 +101,36 @@ module Subscriptions
         expect(last_request.session[:shopify][:token]).to eq('token')
       end
     end
+
+    describe 'GET /logout' do
+      let(:rack_env) {
+        {
+          'rack.session' => {
+            :shopify => {
+              :shop => 'snowdevil.myshopify.com',
+              :token => 'token'
+            }
+          }
+        }
+      }
+
+      it 'deletes the shopify key from session' do
+        get '/logout', {}, rack_env
+
+        expect(last_request.session[:shopify]).to be_nil
+      end
+
+      it 'responds with a 302 (Redirect)' do
+        get '/logout'
+
+        expect(last_response.status).to eq(302)
+      end
+
+      it 'redirects to the installation page' do
+        get '/logout'
+
+        expect(last_response.location).to include('/install')
+      end
+    end
   end
 end
