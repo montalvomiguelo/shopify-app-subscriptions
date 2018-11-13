@@ -62,5 +62,24 @@ module Subscriptions
         expect(last_response).not_to be_ok
       end
     end
+
+    it 'allows to fetch data with graphql' do
+      pending 'Add graphql middleware'
+
+      env 'rack.session', {
+        :shopify => {
+          :shop => 'snowdevil.myshopify.com',
+          :token => 'token'
+        }
+      }
+
+      env 'CONTENT_TYPE', 'application/json'
+
+      post '/graphql', '{"query":"{ shop { name } }"}'
+
+      parsed = JSON.parse(last_response.body)
+
+      expect(parsed['data']).to eq({ 'shop'=>{ 'name'=>'Snowdevil' } })
+    end
   end
 end
