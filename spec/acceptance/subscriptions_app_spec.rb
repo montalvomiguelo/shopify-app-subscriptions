@@ -1,5 +1,5 @@
 module Subscriptions
-  RSpec.describe 'Subscriptions App', :omniauth, :database do
+  RSpec.describe 'Subscriptions App', :omniauth, :database, :webmock do
     include Rack::Test::Methods
 
     def app
@@ -37,21 +37,41 @@ module Subscriptions
     end
 
     context 'when session exists' do
-      let(:rack_env) {
-        {
-          'rack.session' => {
-            :shopify => {
-              :shop => 'snowdevil.myshopify.com',
-              :token => 'token'
-            }
+      before :each do
+        env 'rack.session', {
+          :shopify => {
+            :shop => 'snowdevil.myshopify.com',
+            :token => 'token'
           }
         }
-      }
+      end
 
       it 'allows to access the home page' do
-        get '/', {}, rack_env
+        get '/'
 
         expect(last_response).to be_ok
+      end
+
+      it 'allows to fetch data with graphql' do
+        stub_request(:post, "http://snowdevil.myshopify.com/admin/api/graphql.json").
+          with(
+            body: '{"query":"{ shop { name } }"}',
+            headers: {
+              'Content-Length'=>'29',
+              'Content-Type'=>'application/json',
+              'Host'=>'snowdevil.myshopify.com',
+              'X-Forwarded-For'=>'127.0.0.1',
+              'X-Shopify-Access-Token'=>'token'
+            }).
+            to_return(status: 200, body: '{"data":{"shop":{"name":"Snowdevil"}},"extensions":{"cost":{"requestedQueryCost":1,"actualQueryCost":1,"throttleStatus":{"maximumAvailable":1000.0,"currentlyAvailable":999,"restoreRate":50.0}}}}', headers: {})
+
+        env 'CONTENT_TYPE', 'application/json'
+
+        post '/graphql', '{"query":"{ shop { name } }"}'
+
+        parsed = JSON.parse(last_response.body)
+
+        expect(parsed['data']).to eq({ 'shop'=>{ 'name'=>'Snowdevil' } })
       end
     end
 
@@ -61,25 +81,6 @@ module Subscriptions
 
         expect(last_response).not_to be_ok
       end
-    end
-
-    it 'allows to fetch data with graphql' do
-      pending 'Add graphql middleware'
-
-      env 'rack.session', {
-        :shopify => {
-          :shop => 'snowdevil.myshopify.com',
-          :token => 'token'
-        }
-      }
-
-      env 'CONTENT_TYPE', 'application/json'
-
-      post '/graphql', '{"query":"{ shop { name } }"}'
-
-      parsed = JSON.parse(last_response.body)
-
-      expect(parsed['data']).to eq({ 'shop'=>{ 'name'=>'Snowdevil' } })
     end
   end
 end
