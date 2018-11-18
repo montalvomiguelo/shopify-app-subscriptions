@@ -8,6 +8,8 @@ module Subscriptions
       provider :shopify, ENV['SHOPIFY_API_KEY'], ENV['SHOPIFY_SHARED_SECRET'], :scope => 'read_products,read_orders,write_content'
     end
 
+    use Shopify::GraphQLProxy
+
     configure :development do
       register Sinatra::Reloader
     end

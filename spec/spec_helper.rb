@@ -25,6 +25,10 @@ RSpec.configure do |config|
     require_relative 'support/database'
   end
 
+  config.when_first_matching_example_defined(:webmock) do
+    require_relative 'support/http_streaming_response_patch'
+  end
+
   config.filter_gems_from_backtrace 'rack', 'rack-test', 'sequel', 'sinatra'
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

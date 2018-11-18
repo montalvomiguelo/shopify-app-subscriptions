@@ -8,6 +8,7 @@ gem 'activesupport', require: 'active_support/all'
 gem 'omniauth-shopify-oauth2'
 gem 'sinatra-contrib'
 gem 'rake'
+gem 'shopify-graphql_proxy'
 
 group :production do
   gem 'mysql2'
@@ -23,4 +24,5 @@ group :test do
   gem 'rack-test'
   gem 'rspec'
   gem 'database_cleaner'
+  gem 'webmock', require: 'webmock/rspec'
 end

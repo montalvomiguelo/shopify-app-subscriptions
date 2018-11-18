@@ -1,7 +1,7 @@
 module Subscriptions
   Shop = Struct.new(:id, :name, :token)
 
-  RSpec.describe App, :omniauth do
+  RSpec.describe App, :omniauth, :webmock do
     include Rack::Test::Methods
 
     def app
@@ -130,6 +130,47 @@ module Subscriptions
         get '/logout'
 
         expect(last_response.location).to include('/install')
+      end
+    end
+
+    describe 'POST /graphql' do
+      context 'when shop is logged in' do
+        before :each do
+          env 'rack.session', {
+            :shopify => {
+              :shop => 'snowdevil.myshopify.com',
+              :token => 'token'
+            }
+          }
+
+          env 'CONTENT_TYPE', 'application/json'
+
+          stub_request(:post, "http://snowdevil.myshopify.com/admin/api/graphql.json").
+            with(
+              body: '{"query":"{ shop { name } }"}',
+              headers: {
+                'Content-Length'=>'29',
+                'Content-Type'=>'application/json',
+                'Host'=>'snowdevil.myshopify.com',
+                'X-Forwarded-For'=>'127.0.0.1',
+                'X-Shopify-Access-Token'=>'token'
+              }).
+              to_return(status: 200, body: '', headers: {})
+        end
+
+        it 'responds with a 200 (OK)' do
+          post '/graphql', '{"query":"{ shop { name } }"}'
+
+          expect(last_response.status).to eq(200)
+        end
+      end
+
+      context 'when shop is not logged in' do
+        it 'responds with a 403 (Unauthorized)' do
+          post '/graphql', '{"query":"{ shop { name } }"}'
+
+          expect(last_response.status).to eq(403)
+        end
       end
     end
   end
