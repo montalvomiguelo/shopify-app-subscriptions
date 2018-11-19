@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subscriptions</title>
+  <% if ENV['RACK_ENV'] === 'production' %>
+    <link rel="stylesheet" href="/packs/application.css">
+  <% end %>
+
+  <meta name="ShopOrigin" content="<%= current_shop_name %>" />
+  <meta name="APIKey" content="<%= ENV['SHOPIFY_API_KEY'] %>" />
+  <% if ENV['RACK_ENV'] === 'production' %>
+    <meta name="ForceRedirect" content="true" />
+  <% end %>
+</head>
+<body>
+  <%= yield %>
+
+  <% if ENV['RACK_ENV'] === 'production' %>
+    <script src="/packs/application.js"></script>
+  <% else %>
+    <script src="https://localhost:3035/packs/application.js"></script>
+  <% end %>
+</body>
+</html>

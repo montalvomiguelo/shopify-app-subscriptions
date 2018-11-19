@@ -32,5 +32,9 @@ module Subscriptions
         authenticate!(return_to)
       end
     end
+
+    def current_shop_name
+      return session[:shopify][:shop]
+    end
   end
 end

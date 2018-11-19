@@ -1,6 +1,7 @@
 module Subscriptions
   class App < Sinatra::Base
     set :protection, except: :frame_options
+    set :public_folder, Proc.new { File.join(root, '../public') }
 
     enable :sessions
 
@@ -18,10 +19,11 @@ module Subscriptions
 
     get '/' do
       protected!
+      erb :home
     end
 
     get '/install' do
-      erb :install
+      erb :install, layout: false
     end
 
     post '/login' do
