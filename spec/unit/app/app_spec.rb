@@ -12,7 +12,7 @@ module Subscriptions
       shop = Shop.new(1, 'snowdevil.myshopify.com', 'token')
 
       expect_any_instance_of(Subscriptions::ShopRepository).to receive(:update_or_create)
-        .with(name: 'snowdevil.myshopify.com', token: 'token')
+        .with({ name: 'snowdevil.myshopify.com'}, token: 'token')
         .and_return(shop)
     end
 

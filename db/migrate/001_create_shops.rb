@@ -4,7 +4,8 @@ Sequel.migration do
       primary_key :id
       index :name
       String :name
-      String :token
+      String :encrypted_token
+      String :encrypted_token_iv
     end
   end
 end

@@ -8,6 +8,8 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
+    attr_encrypted (3.1.0)
+      encryptor (~> 3.0.0)
     backports (3.11.4)
     byebug (10.0.2)
     concurrent-ruby (1.1.3)
@@ -16,6 +18,7 @@ GEM
     database_cleaner (1.7.0)
     diff-lcs (1.3)
     dotenv (2.5.0)
+    encryptor (3.0.0)
     faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
     hashdiff (0.3.7)
@@ -97,6 +100,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
+  attr_encrypted
   byebug
   database_cleaner
   dotenv

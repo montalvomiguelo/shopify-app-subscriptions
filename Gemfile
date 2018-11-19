@@ -9,6 +9,7 @@ gem 'omniauth-shopify-oauth2'
 gem 'sinatra-contrib'
 gem 'rake'
 gem 'shopify-graphql_proxy'
+gem 'attr_encrypted'
 
 group :production do
   gem 'mysql2'
